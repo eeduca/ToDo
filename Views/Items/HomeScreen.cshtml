@@ -1,0 +1,32 @@
+﻿@model List<ToDo.Models.Item>
+@{
+	ViewData["Title"] = "To Do Lists";
+}
+
+<h3>Create new task group</h3>
+
+<table>
+	<thead>
+		<tr>
+			<th>Id</th>
+			<th>Group</th>
+			<th>Text</th>
+			<th>Done</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.GroupToDo</td>
+				<td>@item.TextToDo</td>
+				<td>@item.CheckedDone</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

@@ -1,0 +1,22 @@
+﻿@model ToDo.Models.Item
+@{
+
+	ViewData["Title"] = "Edit";
+}
+<h3>Edit the selected task</h3>
+
+<form asp-action="Edit" method="post">
+	<div class="form-group">
+		<label for="Group">Group</label>
+		<input type="text" class="form-control" asp-for="GroupToDo">
+	</div>
+	<div class="form-group">
+		<label for="TextToDo">Text of the first task</label>
+		<input type="text" class="form-control" asp-for="TextToDo">
+	</div>
+	<div class="form-check">
+		<label class = "form-check-label" for="CheckedDone">Done</label>
+		<input type="checkbox" class="form-check-input" asp-for="CheckedDone">
+	</div>
+	<button type="submit" class="btn btn-primary">Submit</button>
+</form>
