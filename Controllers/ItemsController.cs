@@ -20,6 +20,12 @@ namespace ToDo.Controllers
             return View(item);
         }
 
+        public async Task<IActionResult> Test()
+        {
+            var item = await _context.Items.ToListAsync();
+            return View(item);
+        }
+
         public IActionResult Create()
         {
             return View();
