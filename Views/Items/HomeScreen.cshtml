@@ -1,13 +1,12 @@
 ﻿@model List<ToDo.Models.Item>
 @{
-	ViewData["Title"] = "To Do Lists";
+	ViewData["Title"] = "My ToDo Lists";
 
 	List<string> groupName = new List<string>();
 	int groupLen;
 
 }
 
-<h3>Create new task group</h3>
 
 @foreach (var item in Model)
 {
@@ -21,48 +20,45 @@
 }
 
 <div class="container">
-	@for (int j = 0; j < groupLen/3 + 1; j++)
+	
+		<div class="row row-cols-3">
 
-	{
-		<div class="row">
-
-			@for (int i = j*3; i < j * 3 + 3 && i < groupLen; i++)
+			@foreach (string groupItem in groupName)
 
 			{
-			<div class="col">
-				<table>
-					<thead>
-						<tr>@groupName[i]</tr>
-						<tr>
-							<th>Id</th>
-							<th>Text</th>
-							<th>Done</th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach (var item in Model)
-						{
-							if (@item.GroupToDo == @groupName[i])
+				<div class="col">
+					<table class="table table-striped border border-dark">
+						<thead>
+						<tr>@groupItem</tr>
+							<tr>
+								<th>Text</th>
+								<th>Done</th>
+								<th> </th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
 							{
-								<tr>
-									<td>@item.Id</td>
-									<td>@item.TextToDo</td>
-									<td>@item.CheckedDone</td>
-									<td>
-										<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-										<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-									</td>
-								</tr>
+							if (@item.GroupToDo == @groupItem)
+								{
+									<tr>
+										<td>@item.TextToDo</td>
+										<td>@item.CheckedDone</td>
+										<td>
+											<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+											<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+										</td>
+									</tr>
+								}
+								
 							}
-						
-						}
-					
-					</tbody>
-				</table>
-			</div>
+							<tr><td><a asp-action="Create">Create new task</a></td></tr>
+						</tbody>
+					</table>
+				</div>
 			}
 		</div>
-	}
+	
 
 
 </div>

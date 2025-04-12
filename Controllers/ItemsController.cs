@@ -26,8 +26,9 @@ namespace ToDo.Controllers
             return View(item);
         }
 
+        [HttpGet]
         public IActionResult Create()
-        {
+        { 
             return View();
         }
 
