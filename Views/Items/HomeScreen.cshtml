@@ -7,7 +7,21 @@
 
 }
 
+<style>
+	.tableToDo {
+		border: 2px, solid, black;
+		border-radius: 20px;
+		border-collapse: unset;
+		margin: 5px;
+		width: 100%;
+	}
 
+	td.groupName{
+		text-align: center;
+		width: 100%;
+	}
+
+</style>
 @foreach (var item in Model)
 {
 	if (!groupName.Contains(item.GroupToDo))
@@ -20,45 +34,47 @@
 }
 
 <div class="container">
-	
-		<div class="row row-cols-3">
 
-			@foreach (string groupItem in groupName)
+	<div class="row row-cols-3">
 
-			{
-				<div class="col">
-					<table class="table table-striped border border-dark">
-						<thead>
-						<tr>@groupItem</tr>
-							<tr>
-								<th>Text</th>
-								<th>Done</th>
-								<th> </th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach (var item in Model)
-							{
+		@foreach (string groupItem in groupName)
+
+		{
+			<div class="col" >
+				<table class="tableToDo">
+					<thead>
+						<tr>
+							<td class="groupName">@groupItem</td>
+						</tr>
+						<tr>
+							<th>Text</th>
+							<th>Done</th>
+							<th> </th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
 							if (@item.GroupToDo == @groupItem)
-								{
-									<tr>
-										<td>@item.TextToDo</td>
-										<td>@item.CheckedDone</td>
-										<td>
-											<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-											<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-										</td>
-									</tr>
-								}
-								
+							{
+								<tr>
+									<td>@item.TextToDo</td>
+									<td>@item.CheckedDone</td>
+									<td>
+										<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+										<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+									</td>
+								</tr>
 							}
-							<tr><td><a asp-action="Create">Create new task</a></td></tr>
-						</tbody>
-					</table>
-				</div>
-			}
-		</div>
-	
+
+						}
+						<tr><td><a asp-action="Create">Create new task</a></td></tr>
+					</tbody>
+				</table>
+			</div>
+		}
+	</div>
+
 
 
 </div>
