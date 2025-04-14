@@ -67,7 +67,7 @@ namespace ToDo.Controllers
             return View(item);
         }
         [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> ConfirmedDelete(int id)
         {
             var item = await _context.Items.FindAsync(id);
 

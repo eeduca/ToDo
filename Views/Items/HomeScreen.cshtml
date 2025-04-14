@@ -6,8 +6,9 @@
 	int groupLen;
 
 }
-
+@* colors: 9FB3DF 9EC6F3 BDDDE4 FFF1D5*@
 <style>
+
 	.tableToDo {
 		border: 2px, solid, black;
 		border-radius: 20px;
@@ -16,9 +17,10 @@
 		width: 100%;
 	}
 
-	td.groupName{
+	td.groupName {
 		text-align: center;
 		width: 100%;
+		font-weight: bold;
 	}
 
 </style>
@@ -40,17 +42,13 @@
 		@foreach (string groupItem in groupName)
 
 		{
-			<div class="col" >
+			<div class="col">
 				<table class="tableToDo">
 					<thead>
 						<tr>
-							<td class="groupName">@groupItem</td>
+							<td colspan="3" class="groupName">@groupItem</td>
 						</tr>
-						<tr>
-							<th>Text</th>
-							<th>Done</th>
-							<th> </th>
-						</tr>
+
 					</thead>
 					<tbody>
 						@foreach (var item in Model)
@@ -58,17 +56,20 @@
 							if (@item.GroupToDo == @groupItem)
 							{
 								<tr>
-									<td>@item.TextToDo</td>
-									<td>@item.CheckedDone</td>
 									<td>
-										<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-										<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+										<input type="checkbox" style="margin: 2px;" class="form-check-input" asp-for="@item.CheckedDone">
+
+									</td>
+									<td>@item.TextToDo</td>
+									<td>
+										<a asp-action="Edit" asp-route-id="@item.Id">E</a>
+										<a asp-action="Delete" asp-route-id="@item.Id">D</a>
 									</td>
 								</tr>
 							}
 
 						}
-						<tr><td><a asp-action="Create">Create new task</a></td></tr>
+						<tr colspan="3"><td style="width: fit-content; text-align: center;"><a asp-action="Create">C</a></td></tr>
 					</tbody>
 				</table>
 			</div>
