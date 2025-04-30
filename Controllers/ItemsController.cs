@@ -6,6 +6,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ToDo.Controllers
 {
+    public class ToggleDoneDto
+    {
+        public int Id { get; set; }
+        public bool Done { get; set; }
+    }
     public class ItemsController : Controller
     {
         public readonly ToDoContext _context;
@@ -43,13 +48,26 @@ namespace ToDo.Controllers
             }
             return View(item);
         }
-
+        [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
             var item = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
             return View(item);
         }
+
         [HttpPost]
+        public async Task<IActionResult> ToggleDone([FromBody] ToggleDoneDto dto)
+        {
+            var item = await _context.Items.FindAsync(dto.Id);
+            if (item == null)
+                return NotFound();
+
+            item.CheckedDone = dto.Done;
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+        [HttpPost("edit/{id}")]
         public async Task<IActionResult> Edit(int id, [Bind("Id, GroupToDo, TextToDo, CheckedDone")] Item item)
         {
             if (ModelState.IsValid)
@@ -60,13 +78,15 @@ namespace ToDo.Controllers
             }
             return View(item);
         }
-
+      
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
             return View(item);
         }
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]//this atribute is used to mask the name ConfirmedDelete,
+                                        //because you are not allowed to have two Delete methods
+                                        //with the same parameter (int id)
         public async Task<IActionResult> ConfirmedDelete(int id)
         {
             var item = await _context.Items.FindAsync(id);

@@ -7,6 +7,30 @@
 
 }
 @* colors: 9FB3DF 9EC6F3 BDDDE4 FFF1D5*@
+
+<script>
+	function deleteItem(id) {
+		if (confirm("Da li ste sigurni?")) {
+			fetch(`/Items/Delete/${id}`, {
+				method: 'POST'
+			}).then(() => {
+				location.reload(); 
+			});
+		}
+	}
+
+	function toggleDone(id, isChecked) {
+		fetch(`/Items/ToggleDone`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ id: id, done: isChecked })
+		}).then(response => {
+			if (!response.ok) alert("Error occured");
+		});
+	}
+</script>
 <style>
 
 	.tableToDo {
@@ -57,13 +81,14 @@
 							{
 								<tr>
 									<td>
-										<input type="checkbox" style="margin: 2px;" class="form-check-input" asp-for="@item.CheckedDone">
-
+										<input type="checkbox" style="margin-left: 2px; width: stretch;" class="form-check-input"
+										@(item.CheckedDone ? "checked" : "")
+											   onchange="toggleDone(@item.Id, this.checked)" />
 									</td>
 									<td>@item.TextToDo</td>
 									<td>
 										<a asp-action="Edit" asp-route-id="@item.Id">E</a>
-										<a asp-action="Delete" asp-route-id="@item.Id">D</a>
+										<button class="btn" style="padding: unset; width: 25px; height: 25px;" onclick="deleteItem(@item.Id)">X</button>
 									</td>
 								</tr>
 							}
@@ -79,3 +104,4 @@
 
 
 </div>
+
