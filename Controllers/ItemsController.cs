@@ -6,14 +6,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ToDo.Controllers
 {
-    public class ToggleDoneDto
+    public class EditDto
     {
         public int Id { get; set; }
         public bool Done { get; set; }
+         public string ?Text { get; set; }
     }
     public class ItemsController : Controller
     {
         public readonly ToDoContext _context;
+
         public ItemsController(ToDoContext context)
         {
             _context = context;
@@ -56,7 +58,7 @@ namespace ToDo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ToggleDone([FromBody] ToggleDoneDto dto)
+        public async Task<IActionResult> ToggleDone([FromBody] EditDto dto)
         {
             var item = await _context.Items.FindAsync(dto.Id);
             if (item == null)
@@ -67,6 +69,20 @@ namespace ToDo.Controllers
 
             return Ok();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateText([FromBody] EditDto dto)
+        {
+            var item = await _context.Items.FindAsync(dto.Id);
+            if (item == null)
+                return NotFound(); 
+
+            item.TextToDo = dto.Text;
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpPost("edit/{id}")]
         public async Task<IActionResult> Edit(int id, [Bind("Id, GroupToDo, TextToDo, CheckedDone")] Item item)
         {
@@ -99,5 +115,6 @@ namespace ToDo.Controllers
             return RedirectToAction("HomeScreen");
 
         }
+
     }
 }

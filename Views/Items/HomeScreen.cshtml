@@ -10,11 +10,12 @@
 
 <script>
 	function deleteItem(id) {
-		if (confirm("Da li ste sigurni?")) {
+		if (confirm("Are you sure?")) {
 			fetch(`/Items/Delete/${id}`, {
 				method: 'POST'
+
 			}).then(() => {
-				location.reload(); 
+				location.reload();
 			});
 		}
 	}
@@ -22,16 +23,39 @@
 	function toggleDone(id, isChecked) {
 		fetch(`/Items/ToggleDone`, {
 			method: "POST",
-			headers: {
+			headers:{
 				"Content-Type": "application/json"
-			},
+		},
 			body: JSON.stringify({ id: id, done: isChecked })
 		}).then(response => {
-			if (!response.ok) alert("Error occured");
+			if (!response.ok) alert("Error occured after delete");
+		});
+	}
+
+	function updateText(id, textToDo) {
+		const td = document.getElementById('td-' + id);
+		const newText = td.innerText.trim();
+
+		fetch(`/Items/UpdateText`, {
+			method: "POST",
+			headers:{
+				"Content-Type": "application/json"
+		},
+			body: JSON.stringify({ id: id, text: newText })
+		}).then(response => {
+			if (!response.ok) alert("Error occured after update");
+			 else location.reload();
 		});
 	}
 </script>
 <style>
+	.btnIcon {
+		border: none;
+		padding: unset;
+		width: 25px;
+		height: 25px;
+		background-color: transparent;
+	}
 
 	.tableToDo {
 		border: 2px, solid, black;
@@ -81,20 +105,31 @@
 							{
 								<tr>
 									<td>
-										<input type="checkbox" style="margin-left: 2px; width: stretch;" class="form-check-input"
+										<input type="checkbox" style="margin-left: 2px; width: stretch;"
+											   class="form-check-input"
 										@(item.CheckedDone ? "checked" : "")
-											   onchange="toggleDone(@item.Id, this.checked)" />
+											   onchange="toggleDone(@item.Id, this.checked)">
 									</td>
-									<td>@item.TextToDo</td>
+									<td contenteditable="true" id="td-@item.Id" onblur="updateText(@item.Id)">
+										@item.TextToDo
+									</td>
 									<td>
-										<a asp-action="Edit" asp-route-id="@item.Id">E</a>
-										<button class="btn" style="padding: unset; width: 25px; height: 25px;" onclick="deleteItem(@item.Id)">X</button>
+										<button class="btnIcon" onclick="deleteItem(@item.Id)">
+											<i class="fas fa-trash"></i>
+										</button>
 									</td>
 								</tr>
 							}
 
 						}
-						<tr colspan="3"><td style="width: fit-content; text-align: center;"><a asp-action="Create">C</a></td></tr>
+						<tr colspan="3">
+							<td style="width: fit-content; text-align: center;">
+								<button class="btnIcon" onclick="deleteItem(5)">
+									<i class="fa-solid fa-plus"></i>
+								</button>
+								@* <a asp-action="Create">C</a> *@
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
