@@ -32,7 +32,7 @@
 		});
 	}
 
-	function updateText(id, textToDo) {
+	function updateText(id) {
 		const td = document.getElementById('td-' + id);
 		const newText = td.innerText.trim();
 
@@ -45,6 +45,20 @@
 		}).then(response => {
 			if (!response.ok) alert("Error occured after update");
 			 else location.reload();
+		});
+	}
+	function createNewTask(groupName){
+		const td = document.getElementById('new-' + groupName);
+		const newText = td.innerText.trim();
+		fetch('/Items/CreateNewTask', {
+			method: "POST",
+			headers:{
+				"Content-Type": "application/json"
+		},
+			body:JSON.stringify({text: newText, groupName: groupName})
+		}).then(response => {
+		if(!response.ok) alert("Error detected while creating new task!");
+		else location.reload();
 		});
 	}
 </script>
@@ -104,16 +118,17 @@
 							if (@item.GroupToDo == @groupItem)
 							{
 								<tr>
-									<td>
-										<input type="checkbox" style="margin-left: 2px; width: stretch;"
+									<td style="width:auto">
+										<input type="checkbox" style="margin-left: 2px; "
 											   class="form-check-input"
 										@(item.CheckedDone ? "checked" : "")
 											   onchange="toggleDone(@item.Id, this.checked)">
 									</td>
-									<td contenteditable="true" id="td-@item.Id" onblur="updateText(@item.Id)">
+									<td contenteditable="true" id="td-@item.Id" onblur="updateText(@item.Id)"
+										style="width:100%; text-align:left;">
 										@item.TextToDo
 									</td>
-									<td>
+									<td style="width:auto">
 										<button class="btnIcon" onclick="deleteItem(@item.Id)">
 											<i class="fas fa-trash"></i>
 										</button>
@@ -123,11 +138,15 @@
 
 						}
 						<tr colspan="3">
+							<td colspan="2" style="width:100%;">
+								<div contenteditable="true" id="new-@groupItem"
+									 style="margin-left: 20px;text-align:left; border: solid; 
+border-width:2px; border-radius:2px"></div>
+							</td>
 							<td style="width: fit-content; text-align: center;">
-								<button class="btnIcon" onclick="deleteItem(5)">
+								<button class="btnIcon" onclick="createNewTask('@groupItem')">
 									<i class="fa-solid fa-plus"></i>
 								</button>
-								@* <a asp-action="Create">C</a> *@
 							</td>
 						</tr>
 					</tbody>

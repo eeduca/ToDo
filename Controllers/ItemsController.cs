@@ -10,7 +10,8 @@ namespace ToDo.Controllers
     {
         public int Id { get; set; }
         public bool Done { get; set; }
-         public string ?Text { get; set; }
+        public string? Text { get; set; }
+        public string? GroupName { get; set; }
     }
     public class ItemsController : Controller
     {
@@ -35,7 +36,7 @@ namespace ToDo.Controllers
 
         [HttpGet]
         public IActionResult Create()
-        { 
+        {
             return View();
         }
 
@@ -49,6 +50,29 @@ namespace ToDo.Controllers
                 return RedirectToAction("HomeScreen");
             }
             return View(item);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateNewTask([FromBody] EditDto dto)
+
+        {
+
+            Item item = new Item();
+            item.TextToDo = dto.Text;
+            item.GroupToDo = dto.GroupName;
+            int resultNum = 0;
+
+            try
+            {
+                _context.Items.Add(item);
+                resultNum = await _context.SaveChangesAsync(); //result contains 
+                                                               //number of state entries written to the database
+
+                Console.WriteLine(resultNum);
+            }
+            catch (Exception ex) { Console.WriteLine(ex.Message); }
+
+            if (resultNum >= 1) return Ok();
+            else return NotFound();
         }
         [HttpGet("edit/{id}")]
         public async Task<IActionResult> Edit(int id)
@@ -75,7 +99,7 @@ namespace ToDo.Controllers
         {
             var item = await _context.Items.FindAsync(dto.Id);
             if (item == null)
-                return NotFound(); 
+                return NotFound();
 
             item.TextToDo = dto.Text;
             await _context.SaveChangesAsync();
@@ -94,7 +118,7 @@ namespace ToDo.Controllers
             }
             return View(item);
         }
-      
+
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);

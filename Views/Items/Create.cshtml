@@ -2,13 +2,14 @@
 @{
 
 	ViewData["Title"] = "Create";
+	var helloVar = ViewBag.Message as string;
 }
 <h3>Create new task group</h3>
 
 <form asp-action="Create" method="post">
 	<div class="form-group">
 		<label for="Group">Group</label>
-		<input type="text" class="form-control" asp-for="GroupToDo">
+		<input type="text" class="form-control" asp-for="GroupToDo" placeholder=@helloVar>
 	</div>
 	<div class="form-group">
 		<label for="TextToDo">Text of the first task</label>
